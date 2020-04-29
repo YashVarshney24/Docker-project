@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  dbyash:
+    image: mysql:5.7
+    volumes:
+      - mysql_storage_new:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: yash
+      MYSQL_PASSWORD: redhat
+      MYSQL_DATABASE: mydb
+
+  osyash:
+    image: joomla:latest
+    restart: always
+    depends_on:
+      - dbyash
+    ports:
+      - 80:80
+    environment:
+      JOOMLA_DB_HOST: dbyash
+      JOOMLA_DB_USER: yash
+      JOOMLA_DB_PASSWORD: redhat
+      JOOMLA_DB_NAME: mydb
+    volumes:
+      - jm_storage_new:/var/www/html
+
+volumes:
+  mysql_storage_new:
+  jm_storage_new:
